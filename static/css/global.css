@@ -1,0 +1,159 @@
+:root {
+    --color-bg: #FFFFFA;
+    --color-primary-dark: #0D5C63;
+    --color-primary: #44A1A0;
+    --color-accent: #78CDD7;
+    --color-secondary: #247B7B;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-primary-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Buttons */
+button {
+    background-color: var(--color-secondary);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--color-primary);
+}
+
+/* Links */
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-secondary);
+}
+
+/* Flash messages or alerts */
+.alert {
+    background-color: var(--color-accent);
+    color: var(--color-primary-dark);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+/* Header Styling */
+.app-header {
+    background: var(--color-primary);
+    /* your palette */
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.app-title {
+    color: var(--color-bg);
+    margin: 0;
+    font-weight: 700;
+}
+
+/* Right side of header */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-welcome {
+    color: var(--color-bg);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Logout button */
+.header-logout {
+    background: var(--color-secondary);
+    /* #247B7B */
+    padding: 0.45rem 0.8rem;
+    border-radius: 6px;
+    color: var(--color-bg);
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+.header-logout:hover {
+    background: var(--color-accent);
+    /* #44A1A0 */
+}
+
+/* Main content spacing */
+.app-content {
+    padding: 1.5rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+/* Make sure Django-rendered selects get the same look */
+select.form-input,
+input.form-input[type="number"],
+input.form-input[type="text"] {
+    padding: 10px;
+    border: 1px solid #A7D8D7;
+    border-radius: 6px;
+    background: #F7FFFF;
+    width: 100%;
+    margin-top: 6px;
+    box-sizing: border-box;
+}
+
+/* Radio inline styling for RadioSelect */
+.form-radio .django-radio,
+.form-radio input[type="radio"],
+.form-radio-inline input[type="radio"] {
+    margin-right: 8px;
+}
+
+.form-radio-inline ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 18px;
+}
+
+.form-radio-inline li {
+    display: flex;
+    align-items: center;
+}
+
+/* If Django adds id like id_hybrid_or_brake_0 etc, style inputs generically */
+input[type="radio"] {
+    accent-color: #0D5C63;
+    /* modern colored radio in supporting browsers */
+}
+
+/* Small error styling */
+.field-error {
+    color: #D9534F;
+    margin-top: 6px;
+    font-size: 0.9rem;
+}

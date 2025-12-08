@@ -1,0 +1,139 @@
+/* ============================================
+   ZF Global Typography System
+   Clean. Modern. Minimalist.
+============================================ */
+
+/* Load Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Apply globally */
+html,
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #0D5C63;
+    background-color: #FFFFFA;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+}
+
+/* =====================
+   HEADINGS
+   (Consistent scale)
+===================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: inherit;
+    font-weight: 600;
+    color: #0D5C63;
+    margin: 0 0 10px 0;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+h4 {
+    font-size: 17px;
+}
+
+h5 {
+    font-size: 15px;
+}
+
+h6 {
+    font-size: 13px;
+}
+
+/* =====================
+   BODY TEXT
+===================== */
+p,
+li,
+span,
+div {
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+/* =====================
+   LINKS
+===================== */
+a {
+    color: #247B7B;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+a:hover {
+    color: #0D5C63;
+}
+
+/* =====================
+   FORM ELEMENTS
+===================== */
+label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 14px;
+}
+
+button {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* =====================
+   UTILITY CLASSES
+===================== */
+.text-muted {
+    color: #6A8E91;
+}
+
+.text-bold {
+    font-weight: 600;
+}
+
+.text-small {
+    font-size: 13px;
+}
+
+.text-large {
+    font-size: 18px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}

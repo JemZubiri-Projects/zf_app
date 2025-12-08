@@ -1,0 +1,16 @@
+Django==4.2.26
+asgiref==3.11.0
+numpy==2.0.2
+pandas==2.3.3
+PyMySQL==1.1.2
+python-dateutil==2.9.0.post0
+pytz==2025.2
+sqlparse==0.5.4
+typing_extensions==4.15.0
+cryptography
+
+tzdata==2025.2
+altgraph==0.17.2
+future==0.18.2
+macholib==1.15.2
+six==1.15.0

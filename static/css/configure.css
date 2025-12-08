@@ -1,0 +1,685 @@
+/* ============================================
+   GLOBAL TYPOGRAPHY + NORMALIZATION
+============================================ */
+.config-outer-card,
+.config-wrapper,
+.config-body,
+.side-nav-item,
+.main-tab,
+.form-label,
+.form-input,
+.next-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    /* Normalizes typography */
+}
+
+/* Make Django forms look consistent */
+select.form-input,
+input.form-input {
+    font-size: 14px !important;
+}
+
+/* ============================================
+   CARD CONTAINER
+============================================ */
+.config-outer-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.05),
+        0 12px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid #F1F1F1;
+}
+
+.config-wrapper {
+    padding: 32px 36px;
+}
+
+/* ============================================
+   MAIN TABS (Top Tabs)
+============================================ */
+.main-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.main-tab {
+    padding: 14px 18px;
+    border-radius: 6px;
+    background: #78CDD7;
+    color: #0D5C63;
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.main-tab.active {
+    background: #0D5C63;
+    color: #FFFFFF;
+}
+
+.main-tab.disabled {
+    opacity: 0.40;
+    pointer-events: none;
+}
+
+/* ============================================
+   BODY GRID
+============================================ */
+.config-body {
+    display: grid;
+    grid-template-columns: 220px 1fr 400px;
+    gap: 28px;
+    margin-top: 20px;
+    padding: 12px;
+}
+
+
+/* ============================================
+   LEFT SIDE NAVIGATION
+============================================ */
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.side-nav-item {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #F2FDFC;
+    border: 1px solid #CDEEEE;
+    color: #0D5C63;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.20s ease;
+}
+
+.checkmark {
+    float: right;
+    font-weight: 700;
+    color: #247B7B;
+    font-size: 14px;
+}
+
+/* Make disabled tabs look inactive */
+.side-nav-item.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Improve spacing inside nav-items */
+.side-nav-item {
+    position: relative;
+}
+
+/* Make checkmark white inside active rows */
+.side-nav-item.active .checkmark {
+    color: #FFFFFF;
+}
+
+
+.side-nav-item:hover {
+    background: #DDF7F7;
+}
+
+.side-nav-item.active {
+    background: #0D5C63;
+    color: white;
+    border-color: #0D5C63;
+}
+
+.side-nav-item.completed::after {
+    content: "✓";
+    float: right;
+    color: #247B7B;
+    font-weight: 700;
+}
+
+/* ============================================
+   RIGHT CONTENT AREA
+============================================ */
+.content-area {
+    padding: 22px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.content-section {
+    display: none;
+}
+
+
+/* ============================================
+   FORM ELEMENTS
+============================================ */
+.form-label {
+    margin-top: 16px;
+    margin-bottom: 4px;
+    display: block;
+    color: #247B7B;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.required::after {
+    content: "*";
+    margin-left: 4px;
+    color: #D9534F;
+}
+
+/* Django-style select fields */
+select.form-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background: #F7FFFF url("data:image/svg+xml;utf8,<svg fill='%230D5C63' height='16' width='16' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548l4.484 4.484 4.484-4.484a1 1 0 1 1 1.414 1.414l-5.192 5.192a1 1 0 0 1-1.414 0L4.102 8.962a1 1 0 0 1 1.414-1.414z'/></svg>") no-repeat right 12px center;
+    background-size: 14px;
+    padding-right: 40px;
+    /* space so text doesn’t overlap the arrow */
+}
+
+
+/* Number inputs */
+input.form-input {
+    background-color: #F7FFFF;
+    border: 1px solid #A7D8D7;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+/* Inline field for power/RPM */
+.inline-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.unit-label {
+    color: #0D5C63;
+    font-weight: 700;
+}
+
+/* ============================================
+   FIX DJANGO RADIO BUTTONS
+============================================ */
+.form-radio-inline ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.form-radio-inline li {
+    display: flex;
+    align-items: center;
+}
+
+.form-radio-inline label {
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* ============================================
+   NEXT BUTTON
+============================================ */
+.next-row {
+    margin-top: 28px;
+    text-align: right;
+}
+
+.next-btn {
+    padding: 10px 20px;
+    background: #AEE0DF;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: not-allowed;
+    transition: 0.20s;
+}
+
+.next-btn.active {
+    background: #247B7B;
+    cursor: pointer;
+}
+
+.next-btn.active:hover {
+    background: #0D5C63;
+}
+
+.quote-btn {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px 0;
+    background: #247B7B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.25s ease;
+}
+
+.quote-btn:hover {
+    background: #0D5C63;
+}
+
+/* SUMMARY CARD */
+
+.summary-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    border: 1px solid #E8F4F4;
+    height: fit-content;
+}
+
+.summary-card h3 {
+    margin-top: 0;
+    color: #0D5C63;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.summary-divider {
+    margin: 14px 0;
+    height: 1px;
+    background: #E2F1F1;
+    border-radius: 2px;
+}
+
+/* Inline summary rows (only applied on the summary page) */
+.summary-card.summary-final .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.summary-card.summary-final .summary-row p {
+    margin: 0;
+    color: #0D5C63;
+}
+
+.summary-row {
+    margin-bottom: 3px;
+    font-size: 0.95rem;
+    color: #247B7B;
+}
+
+.summary-row p {
+    text-align: right;
+}
+
+.summary-row strong {
+    color: #0D5C63;
+}
+
+.summary-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 14px 0;
+    object-fit: contain;
+}
+
+.summary-empty {
+    padding: 10px;
+    background: #F2FDFC;
+    border: 1px dashed #CDEEEE;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #5A7A7A;
+    text-align: center;
+}
+
+.summary-placeholder {
+    margin-top: 20px;
+    text-align: center;
+    padding: 18px 10px;
+    border-radius: 10px;
+    background: #F9FDFD;
+    border: 1px dashed #DCEEEE;
+}
+
+.summary-graphic {
+    width: 80px;
+    height: 50px;
+    margin: 0 auto 10px;
+    background: linear-gradient(135deg, #E2F4F4 0%, #EDF9F9 100%);
+    border-radius: 6px;
+    opacity: 0.6;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #247B7B;
+    margin-bottom: 4px;
+}
+
+.summary-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0D5C63;
+}
+
+.summary-value.placeholder {
+    color: #A7B6B6;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.accessories-wrapper,
+.summary-wrapper {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 28px;
+    margin-top: 20px;
+}
+
+.summary-section-title {
+    margin-top: 24px;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0D5C63;
+}
+
+.summary-accessories-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.summary-accessory-item {
+    padding: 4px 0;
+    font-size: 0.95rem;
+    display: flex;
+    gap: 6px;
+}
+
+.summary-accessory-label {
+    font-weight: bolder;
+    color: #247B7B;
+}
+
+.summary-accessory-value {
+    font-size: .95rem;
+    color: #0D5C63;
+}
+
+.placeholder-text {
+    margin-top: 10px;
+    padding: 12px;
+    background: #F7FFFF;
+    border: 1px solid #DDEEEE;
+    border-radius: 8px;
+    color: #0D5C63;
+    font-style: italic;
+}
+
+.main-tab-link {
+    text-decoration: none;
+}
+
+.main-tab-link button {
+    width: 100%;
+}
+
+.main-tab.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.summary-overview h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #0D5C63;
+}
+
+.summary-section h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #247B7B;
+    font-size: 1.05rem;
+}
+
+.spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 0.95rem;
+}
+
+.spec-table th,
+.spec-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #E2F1F1;
+    text-align: left;
+}
+
+.spec-table th {
+    font-weight: 600;
+    background: #F5FBFB;
+    color: #0D5C63;
+}
+
+.spec-table td {
+    color: #234C4C;
+}
+
+.empty-note {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #7A9A9A;
+    font-style: italic;
+}
+
+/* Make summary content span both middle + right columns */
+.content-area.summary-full {
+    grid-column: span 2;
+}
+
+/* Summary header: image + text inline */
+.summary-header {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.summary-header-media {
+    flex: 0 0 170px;
+}
+
+.summary-header-text {
+    flex: 1;
+}
+
+.summary-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0D5C63;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.summary-description {
+    margin: 0 0 10px;
+    color: #234C4C;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.summary-bullets {
+    margin: 0;
+    padding-left: 18px;
+    color: #234C4C;
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.hidden-nav {
+    display: none !important;
+}
+
+/* ============================
+   GET QUOTE MODAL (Beautiful)
+   ============================ */
+.quote-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    /* toggled by JS via .show */
+    z-index: 1200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.quote-modal.show {
+    display: flex;
+}
+
+/* Backdrop */
+.quote-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(6, 28, 28, 0.45);
+    backdrop-filter: blur(2px);
+    transition: opacity 220ms ease;
+}
+
+/* Panel */
+.quote-modal-panel {
+    position: relative;
+    z-index: 1210;
+    width: 520px;
+    max-width: 100%;
+    background: linear-gradient(180deg, #ffffff 0%, #FBFFFF 100%);
+    border-radius: 12px;
+    padding: 20px 22px;
+    box-shadow: 0 18px 40px rgba(6, 28, 28, 0.18);
+    border: 1px solid #E6F5F5;
+    transform: translateY(6px);
+    transition: transform 220ms ease, opacity 220ms ease;
+}
+
+/* When visible, subtle lift */
+.quote-modal.show .quote-modal-panel {
+    transform: translateY(0);
+}
+
+/* Close button */
+.quote-modal-close {
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    color: #7A9A9A;
+    cursor: pointer;
+}
+
+/* Header */
+.quote-modal-header h3 {
+    margin: 0 0 6px 0;
+    color: #0D5C63;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.quote-modal-header .small-note {
+    margin: 0;
+    color: #5A7A7A;
+    font-size: 0.92rem;
+}
+
+/* Form inputs (reuse your existing .form-input) */
+.quote-form .form-label {
+    margin-top: 12px;
+}
+
+.quote-form .form-input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #CDEEEE;
+    background: #F7FFFF;
+    box-sizing: border-box;
+}
+
+/* Field errors */
+.quote-form .field-error {
+    color: #D9534F;
+    font-size: 0.88rem;
+    margin-top: 6px;
+}
+
+/* Actions */
+.quote-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.quote-actions .next-btn {
+    min-width: 110px;
+}
+
+/* Feedback */
+.quote-feedback {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    display: none;
+}
+
+.quote-feedback.success {
+    background: #E6F7F6;
+    color: #0D5C63;
+    border: 1px solid #CDEEEE;
+    display: block;
+}
+
+.quote-feedback.error {
+    background: #FFF2F0;
+    color: #B33A3A;
+    border: 1px solid #F4C2C2;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 560px) {
+    .quote-modal-panel {
+        padding: 16px;
+        width: 100%;
+    }
+}

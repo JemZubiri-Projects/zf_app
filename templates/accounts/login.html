@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="login-wrapper">
+    <div class="login-card">
+        <h2 class="login-title">Login</h2>
+
+        <form method="POST" class="login-form" style="max-width: 300px;">
+            {% csrf_token %}
+
+            <input name="username" placeholder="Username" required
+                style="display:block;width:100%;margin:6px 0;padding:8px;border:1px solid var(--color-primary);border-radius:4px;">
+            <input type="password" name="password" placeholder="Password" required
+                style="display:block;width:100%;margin:6px 0;padding:8px;border:1px solid var(--color-primary);border-radius:4px;">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ZF{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+</head>
+
+<div class="landing-full">
+    <div class="landing-inner">
+        <h1 class="landing-heading">What kind of application can we help you with?</h1>
+
+        <div class="landing-grid" role="list">
+            <!-- Marine -->
+            <a role="listitem" href="{% url 'products:configure_product' %}?type=marine"
+                class="landing-card landing-marine" data-type="marine" aria-label="Marine application">
+                <div class="card-bg"></div>
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <span class="card-label">Marine</span>
+                    <span class="card-sub">Crew &amp; propulsion systems</span>
+                </div>
+            </a>
+
+            <!-- Industrial -->
+            <a role="listitem" href="{% url 'products:configure_product' %}?type=industrial"
+                class="landing-card landing-industrial" data-type="industrial" aria-label="Industrial application">
+                <div class="card-bg"></div>
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <span class="card-label">Industrial</span>
+                    <span class="card-sub">Rail &amp; heavy machinery</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // small accessibility / keyboard support: enter key on focused card activates it
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && document.activeElement && document.activeElement.classList.contains('landing-card')) {
+            document.activeElement.click();
+        }
+    });
+
+    // optional: visually mark when focused (useful for keyboard users)
+    document.querySelectorAll('.landing-card').forEach(c => {
+        c.setAttribute('tabindex', '0');
+    });
+</script>
+{% endblock %}

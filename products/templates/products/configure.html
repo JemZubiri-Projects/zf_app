@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Configure Product — ZF{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/configure.css' %}">
+
+<div class="config-outer-card">
+    <div class="config-wrapper">
+
+        <!-- MAIN TABS -->
+        <div class="main-tabs">
+            <div class="main-tabs">
+                <a href="?section=duty" class="main-tab-link">
+                    <button class="main-tab 
+                               {% if section in 'duty config manufacturer series' %}active{% endif %}">
+                        Product Series & Model
+                    </button>
+                </a>
+
+                {% if series_done %}
+                <a href="?section=accessories" class="main-tab-link">
+                    <button class="main-tab 
+                                   {% if section == 'accessories' %}active{% endif %}">
+                        Accessories
+                    </button>
+                </a>
+                {% else %}
+                <button class="main-tab disabled">Accessories</button>
+                {% endif %}
+
+                {% if accessories_done %}
+                <a href="?section=summary" class="main-tab-link">
+                    <button class="main-tab 
+                                   {% if section == 'summary' %}active{% endif %}">
+                        Summary
+                    </button>
+                </a>
+                {% else %}
+                <button class="main-tab disabled">Summary</button>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <div class="config-body {% if section == 'summary' %}summary-layout{% endif %}">
+
+            <div class="side-nav {% if section == 'summary' %}hidden-nav{% endif %}">
+
+                {% if section == "duty" or section == "config" or section == "manufacturer" or section == "series" %}
+
+                <a href="?section=duty" class="side-nav-item {% if section == 'duty' %}active{% endif %}">
+                    Duty Cycle
+                    {% if duty_done %}<span class="checkmark">✓</span>{% endif %}
+                </a>
+
+                <a href="{% if duty_done %}?section=config{% else %}#{% endif %}" class="side-nav-item 
+                              {% if section == 'config' %}active{% endif %}
+                              {% if not duty_done %}disabled{% endif %}">
+                    Configuration
+                    {% if config_done %}<span class="checkmark">✓</span>{% endif %}
+                </a>
+
+                <a href="{% if config_done %}?section=manufacturer{% else %}#{% endif %}" class="side-nav-item 
+                              {% if section == 'manufacturer' %}active{% endif %}
+                              {% if not config_done %}disabled{% endif %}">
+                    Manufacturer & Power
+                    {% if manufacturer_done %}<span class="checkmark">✓</span>{% endif %}
+                </a>
+
+                <a href="{% if manufacturer_done %}?section=series{% else %}#{% endif %}" class="side-nav-item
+                              {% if section == 'series' %}active{% endif %}
+                              {% if not manufacturer_done %}disabled{% endif %}">
+                    Series & Model
+                    {% if series_done %}<span class="checkmark">✓</span>{% endif %}
+                </a>
+
+                {% endif %}
+
+                {% if section == "accessories" %}
+                <div class="side-nav-item active">
+                    Add-Ons
+                </div>
+                {% endif %}
+            </div>
+
+
+
+
+            <!-- RIGHT CONTENT AREA -->
+            <div class="content-area {% if section == 'summary' %}summary-full{% endif %}">
+
+                <!-- ====================== -->
+                <!-- DUTY CYCLE SECTION -->
+                <!-- ====================== -->
+                {% if section == "duty" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <h2>Duty Cycle</h2>
+
+                    <label class="form-label">Primary use of the vessel:</label>
+                    {{ form.vessel_use }}
+
+                    <label class="form-label required">Select a duty cycle:</label>
+                    {{ form.duty_cycle }}
+                    {% if form.duty_cycle.errors %}
+                    <div class="field-error">{{ form.duty_cycle.errors }}</div>
+                    {% endif %}
+                    <input type="hidden" name="next_section" value="config">
+
+                    <div class="next-row">
+                        <button type="submit" class="next-btn" data-next="config">Next</button>
+                    </div>
+                </form>
+                {% endif %}
+
+
+                <!-- ====================== -->
+                <!-- CONFIGURATION SECTION -->
+                <!-- ====================== -->
+                {% if section == "config" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <h2>Configuration</h2>
+
+                    <label class="form-label required">Type of propulsion:</label>
+                    {{ form.propulsion_type }}
+
+                    <label class="form-label">Hybrid / Shaft brake required?</label>
+                    <div class="form-radio-inline">
+                        {{ form.hybrid_or_brake }}
+                    </div>
+
+                    <label class="form-label required">Transmission configuration:</label>
+                    {{ form.transmission_config }}
+
+                    <input type="hidden" name="next_section" value="manufacturer">
+
+                    <div class="next-row">
+                        <button type="submit" class="next-btn" data-next="manufacturer">Next</button>
+                    </div>
+                </form>
+                {% endif %}
+
+
+                <!-- ====================== -->
+                <!-- MANUFACTURER SECTION -->
+                <!-- ====================== -->
+                {% if section == "manufacturer" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <h2>Power Factor & Ratio</h2>
+
+                    <label class="form-label required">Select Manufacturer:</label>
+                    {{ form.engine_manufacturer }}
+
+                    <label class="form-label required">Power Factor:</label>
+                    {{ form.power_factor }}
+
+                    <label class="form-label required">Ratio:</label>
+                    {{ form.ratio }}
+
+                    <input type="hidden" name="next_section" value="series">
+
+                    <div class="next-row">
+                        <button type="submit" class="next-btn active">Next</button>
+                    </div>
+                </form>
+                {% endif %}
+                {% if section == "series" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <h2>Series & Model</h2>
+
+                    <label class="form-label required">Select Series:</label>
+                    {{ form.series }}
+
+                    <label class="form-label required">Select Model:</label>
+                    {{ form.model }}
+
+                    <input type="hidden" name="next_section" value="accessories">
+
+                    <div class="next-row">
+                        <button type="submit" class="next-btn active">Next</button>
+                    </div>
+                </form>
+                {% endif %}
+
+                {% if section == "accessories" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <h2>Add-Ons</h2>
+
+                    <label class="form-label">Bell Housing:</label>
+                    {{ form.bellhousing }}
+
+                    <label class="form-label">Actuation:</label>
+                    {{ form.actuation }}
+
+                    <label class="form-label">Trolling:</label>
+                    {{ form.trolling }}
+
+                    <label class="form-label">Mounting Brackets:</label>
+                    {{ form.mountings }}
+
+                    <label class="form-label">PTO:</label>
+                    {{ form.pto }}
+
+                    <label class="form-label">PTI / Shaft Brake:</label>
+                    {{ form.ptishaftbrake }}
+
+                    <label class="form-label">Trailing Pump:</label>
+                    {{ form.trailingpump }}
+
+                    <label class="form-label">Prop Flange:</label>
+                    {{ form.propflange }}
+
+                    <label class="form-label">Input Flange:</label>
+                    {{ form.inputflange }}
+
+                    <label class="form-label">Monitoring:</label>
+                    {{ form.monitoring }}
+
+                    <input type="hidden" name="next_section" value="summary">
+
+                    <div class="next-row">
+                        <button type="submit" class="next-btn active">Next</button>
+                    </div>
+                </form>
+                {% endif %}
+
+                {% if section == "summary" %}
+                <div class="summary-overview">
+
+                    <!-- TOP HEADER: IMAGE + DESCRIPTION -->
+                    <h2>Configuration Summary</h2>
+                    <div class="summary-header">
+                        <div class="summary-header-media">
+                            {% if config.selected_model %}
+                            <img src="{% static 'images/sample-engine.png' %}" alt="Engine image" class="summary-image">
+                            {% else %}
+                            <div class="summary-placeholder">
+                                <div class="summary-graphic"></div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="summary-header-text">
+                            <h2 class="summary-title">
+                                {{ config.selected_model_name|default:"Transmission configuration summary" }}
+                            </h2>
+
+                            <p class="summary-description">
+                                Three shaft, reverse reduction transmission with hydraulic clutch mounted on the input
+                                shaft and another
+                                mounted on the reverse shaft. Input drive on opposite side to output drive.
+                            </p>
+
+                            <ul class="summary-bullets">
+                                <li>Design, manufacture, and quality control standards comply with ISO 9001.</li>
+                                <li>Lightweight and robust aluminum alloy case (seawater resistant).</li>
+                                <li>Designed to absorb maximum propeller thrust ahead and astern.</li>
+                                <li>Compact, space-saving design.</li>
+                                <li>Smooth and reliable shifting.</li>
+                                <li>Emergency "get home" capability.</li>
+                                <li>Non-reversing NR version also available.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- SPECIFICATIONS TABLE -->
+                    <div class="summary-section">
+                        <h3>Specifications</h3>
+
+                        {% if spec_rows %}
+                        <table class="spec-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Description</th>
+                                    <th>Part Number</th>
+                                    <th>Weight (lb)</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in spec_rows %}
+                                <tr>
+                                    <td><strong>{{ row.item }}</strong></td>
+                                    <td>{{ row.description }}</td>
+                                    <td>{{ row.part_number }}</td>
+                                    <td>{{ row.weight|floatformat:0 }}</td>
+                                    <td>${{ row.price|floatformat:0|intcomma }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class="empty-note">
+                            No transmission has been selected yet. Complete the Product Series &amp; Model step first.
+                        </p>
+                        {% endif %}
+                        <br>
+                        <h3>Application</h3>
+                        <table class="spec-table">
+                            <thead>
+                                <tr>
+                                    <th>Primary Use</th>
+                                    <th>Duty Cycle</th>
+                                    <th>Propulsion Type</th>
+                                    <th>Engine Manufacturer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>{{ config.vessel_use|title }}</strong></td>
+                                    <td>{{ config.duty_cycle|title }}</td>
+                                    <td>{{ config.propulsion_type|title }}</td>
+                                    <td>{{ config.engine_manufacturer }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="summary-card {% if section == 'summary' %}summary-final{% endif %}">
+                {% if section == "summary" %}
+                <h3>Configuration Details</h3>
+                <div class="summary-divider"></div>
+
+                <div class="summary-row">
+                    <strong>Ratio: </strong>
+                    <p>{{ config.ratio|title }}</p>
+
+                </div>
+                <div class="summary-row">
+                    <strong>Series & Model</strong>
+                    <p>{{ config.selected_model }}</p>
+                </div>
+                <div class="summary-row">
+                    <strong>Weight (lb)</strong>
+                    <p>{{ total_weight|floatformat:0|intcomma }}</p>
+                </div>
+                <br>
+                <div class="summary-row">
+                    <strong>Total Price</strong>
+                    <p>${{ total_price|floatformat:0|intcomma }}</p>
+                </div>
+                <button id="open-quote-btn" class="quote-btn" type="button" aria-haspopup="dialog"
+                    aria-controls="quote-modal">
+                    Get Quote
+                </button>
+
+                {% else %}
+
+                {% if config.selected_model %}
+                <!-- If model selected, show image -->
+                <img src="{% static 'images/sample-engine.png' %}" alt="Engine image" class="summary-image">
+                <div class="summary-title">
+                    <h2>{{ config.selected_model_name }}</h2>
+                </div>
+
+                {% else %}
+                <div class="summary-placeholder">
+                    <div class="summary-graphic"></div>
+                </div>
+                {% endif %}
+                <br>
+                <h3>Configuration</h3>
+
+                {% if config.duty_cycle %}
+                <div class="summary-row">
+                    <strong>Duty:</strong> {{ config.duty_cycle|title }}
+                </div>
+                {% else %}
+                <div class="summary-empty">Select a duty cycle to begin.</div>
+                {% endif %}
+
+                {% if config.transmission_config %}
+                <div class="summary-row">
+                    <strong>Transmission:</strong> {{ config.transmission_config }}
+                </div>
+                {% endif %}
+
+                {% if config.power_factor %}
+                <div class="summary-row">
+                    <strong>Power Factor:</strong> {{ config.power_factor }}
+                </div>
+                {% endif %}
+
+                {% if config.ratio %}
+                <div class="summary-row">
+                    <strong>Ratio:</strong> {{ config.ratio }}
+                </div>
+                {% endif %}
+                <br>
+                {% if selected_accessories %}
+                <h3 class="summary-section-title">Accessories</h3>
+
+                {% for acc in selected_accessories %}
+                <div class="summary-row">
+                    <strong>{{ acc.label }}:</strong> {{ acc.value }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% endif %}
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="quote-modal" class="quote-modal" role="dialog" aria-modal="true" aria-labelledby="quote-modal-title"
+    aria-hidden="true">
+    <div class="quote-modal-backdrop" id="quote-modal-backdrop" data-dismiss="modal"></div>
+
+    <div class="quote-modal-panel" role="document" aria-describedby="quote-modal-desc">
+        <button class="quote-modal-close" id="quote-modal-close" aria-label="Close dialog">&times;</button>
+
+        <div class="quote-modal-header">
+            <h3 id="quote-modal-title">Request a Quote</h3>
+            <p id="quote-modal-desc" class="small-note">A few quick details are all we need; we'll connect with you
+                shortly.</p>
+        </div>
+
+        <form id="quote-form" class="quote-form" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="config_uuid" id="quote-config-uuid" value="{{ config.uuid }}">
+
+            <label class="form-label required" for="quote-project">Project name</label>
+            <input id="quote-project" name="project_name" class="form-input" type="text" required
+                autocomplete="organization">
+
+            <div class="field-error" id="error-project" aria-live="polite" style="display:none;"></div>
+
+            <label class="form-label required" for="quote-email">Email address</label>
+            <input id="quote-email" name="email" class="form-input" type="email" required autocomplete="email">
+
+            <div class="field-error" id="error-email" aria-live="polite" style="display:none;"></div>
+
+            <label class="form-label" for="quote-mobile">Mobile number (optional)</label>
+            <input id="quote-mobile" name="mobile" class="form-input" type="tel" placeholder="+63 912 345 6789"
+                autocomplete="tel">
+
+            <div class="quote-actions">
+                <button type="button" id="quote-cancel" class="next-btn">Cancel</button>
+                <button type="submit" id="quote-submit" class="next-btn active">Send Request</button>
+            </div>
+
+            <div id="quote-feedback" class="quote-feedback" role="status" aria-live="polite" style="display:none;">
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{% static 'js/configure.js' %}"></script>
+{% endblock %}
