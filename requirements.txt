@@ -8,7 +8,7 @@ pytz==2025.2
 sqlparse==0.5.4
 typing_extensions==4.15.0
 cryptography
-
+openpyxl
 tzdata==2025.2
 altgraph==0.17.2
 future==0.18.2

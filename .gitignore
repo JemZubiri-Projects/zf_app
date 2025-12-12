@@ -1,0 +1,124 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env*/
+.conda/
+.python-version
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+
+# Logs
+*.log
+logs/
+*.pot
+
+# -----------------------------
+# Django
+# -----------------------------
+# SQLite (if you ever use it locally)
+*.sqlite3
+db.sqlite3
+
+# Django collected static files
+staticfiles/
+staticfiles_build/
+
+# Media uploads (if stored locally)
+media/
+
+# Local settings (if you split them)
+local_settings.py
+
+# Django cache
+*.py,cover
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# -----------------------------
+# Environment / secrets
+# -----------------------------
+.env
+*.env
+.env.*
+.envrc
+
+# -----------------------------
+# IDE / editor
+# -----------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -----------------------------
+# Docker
+# -----------------------------
+# Don’t ignore Dockerfile or docker-compose.yml,
+# they belong in the repo. Only ignore local overrides.
+docker-compose.override.yml
+.docker/
+docker-data/
+docker-logs/
+
+# If you ever bind-mount a local folder for MySQL data
+# (instead of named volumes), ignore it here:
+mysql_data/
+db_data/
+
+# -----------------------------
+# MySQL-related artifacts
+# -----------------------------
+*.sql
+*.sql.gz
+*.dump
+*.bak
+
+# -----------------------------
+# Node (if you later add a frontend in the same repo)
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*

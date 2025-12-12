@@ -195,35 +195,55 @@
                     {% csrf_token %}
                     <h2>Add-Ons</h2>
 
+                    {% if form.bellhousing %}
                     <label class="form-label">Bell Housing:</label>
                     {{ form.bellhousing }}
+                    {% endif %}
 
+                    {% if form.actuation %}
                     <label class="form-label">Actuation:</label>
                     {{ form.actuation }}
+                    {% endif %}
 
+                    {% if form.trolling %}
                     <label class="form-label">Trolling:</label>
                     {{ form.trolling }}
+                    {% endif %}
 
+                    {% if form.mountings %}
                     <label class="form-label">Mounting Brackets:</label>
                     {{ form.mountings }}
+                    {% endif %}
 
+                    {% if form.pto %}
                     <label class="form-label">PTO:</label>
                     {{ form.pto }}
+                    {% endif %}
 
+                    {% if form.ptishaftbrake %}
                     <label class="form-label">PTI / Shaft Brake:</label>
                     {{ form.ptishaftbrake }}
+                    {% endif %}
 
+                    {% if form.trailingpump %}
                     <label class="form-label">Trailing Pump:</label>
                     {{ form.trailingpump }}
+                    {% endif %}
 
+                    {% if form.propflange %}
                     <label class="form-label">Prop Flange:</label>
                     {{ form.propflange }}
+                    {% endif %}
 
+                    {% if form.inputflange %}
                     <label class="form-label">Input Flange:</label>
                     {{ form.inputflange }}
+                    {% endif %}
 
+                    {% if form.monitoring %}
                     <label class="form-label">Monitoring:</label>
                     {{ form.monitoring }}
+                    {% endif %}
 
                     <input type="hidden" name="next_section" value="summary">
 
@@ -448,12 +468,17 @@
 
             <div class="field-error" id="error-email" aria-live="polite" style="display:none;"></div>
 
+            <label class="form-label required" for="quote-po">PO number</label>
+            <input id="quote-po" name="po_number" class="form-input" type="text" required>
+
+            <div class="field-error" id="error-email" aria-live="polite" style="display:none;"></div>
+
             <label class="form-label" for="quote-mobile">Mobile number (optional)</label>
             <input id="quote-mobile" name="mobile" class="form-input" type="tel" placeholder="+63 912 345 6789"
                 autocomplete="tel">
 
             <div class="quote-actions">
-                <button type="button" id="quote-cancel" class="next-btn">Cancel</button>
+                <button type="button" id="quote-cancel" class="next-btn active">Cancel</button>
                 <button type="submit" id="quote-submit" class="next-btn active">Send Request</button>
             </div>
 

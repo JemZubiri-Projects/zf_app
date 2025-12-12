@@ -4,6 +4,7 @@ from configurations.models import ProductConfiguration
 from django.db.models import Q
 from products.models import Family, Part, PartAttribute
 from decimal import Decimal
+from configurations.utils.model_flags import model_matches_flag
 
 VESSEL_USE = [
     ("", "Select primary use"),
@@ -268,17 +269,6 @@ class PowerForm(forms.ModelForm):
 
         self.fields["ratio"].choices += [(r, r) for r in cleaned]
 
-# ================================
-# STEP 4 — SERIES & MODEL
-# ================================
-from decimal import Decimal
-from django import forms
-from configurations.models import ProductConfiguration
-from products.models import Part, PartAttribute
-
-# ================================
-# STEP 4 — SERIES & MODEL (UPDATED)
-# ================================
 class SeriesModelForm(forms.ModelForm):
 
     series = forms.ChoiceField(
@@ -447,7 +437,6 @@ class AccessoriesForm(forms.ModelForm):
         "monitoring": "Monitoring",
     }
 
-    # Dynamically generated dropdowns
     bellhousing = forms.ChoiceField(required=False, choices=[], widget=forms.Select(attrs={"class": "form-input"}))
     actuation = forms.ChoiceField(required=False, choices=[], widget=forms.Select(attrs={"class": "form-input"}))
     trolling = forms.ChoiceField(required=False, choices=[], widget=forms.Select(attrs={"class": "form-input"}))
@@ -462,65 +451,68 @@ class AccessoriesForm(forms.ModelForm):
     class Meta:
         model = ProductConfiguration
         fields = [
-            "bellhousing", "actuation", "trolling", "mountings", "pto",
-            "ptishaftbrake", "trailingpump", "propflange", "inputflange",
-            "monitoring"
+            "bellhousing", "actuation", "trolling", "mountings",
+            "pto", "ptishaftbrake", "trailingpump",
+            "propflange", "inputflange", "monitoring"
         ]
 
     def __init__(self, *args, **kwargs):
         selected_series = kwargs.pop("selected_series", None)
+        super().__init__(*args, **kwargs)
 
-        # Normalize series: convert "2000.0" -> 2000
+        selected_model = self.instance.selected_model
+
+        # Normalize series (e.g. "2000.0" → 2000)
         if selected_series:
             try:
                 selected_series = int(float(selected_series))
-            except:
+            except Exception:
                 selected_series = None
 
-        super().__init__(*args, **kwargs)
-
-        # Default empty choices
-        for f in self.ACCESSORY_FIELDS.keys():
+        # Default blank option
+        for f in self.ACCESSORY_FIELDS:
             self.fields[f].choices = [("", "Select")]
 
-        if not selected_series:
+        if not selected_series or not selected_model:
             return
 
-        # Now, find all parts that belong to this series
-        series_part_ids = PartAttribute.objects.filter(
-            name__iexact="Series",
-            value_number=selected_series
-        ).values_list("part_id", flat=True)
-        
-        if not series_part_ids:
-            return
-
-        # For every accessory type:
         for field_name, family_name in self.ACCESSORY_FIELDS.items():
-
-            # First, get all parts belonging to that family
-            parts_in_family = Part.objects.filter(
-                family__name__iexact=family_name,
-                id__in=series_part_ids
+            parts = (
+                Part.objects
+                .filter(
+                    family__name__iexact=family_name,
+                    attributes__name__iexact="Series",
+                    attributes__value_number=selected_series
+                )
+                .distinct()
             )
 
-            # Then extract that accessory's own value (from PartAttribute)
-            attrs = PartAttribute.objects.filter(
-                part__in=parts_in_family,
-                name__iexact="Description"
-            ).values("value_text", "value_number").distinct()
+            valid_options = set()
 
-            cleaned = []
-            for a in attrs:
-                txt = a["value_text"]
-                num = a["value_number"]
+            for part in parts:
+                flag_attrs = PartAttribute.objects.filter(
+                    part=part,
+                    value_text__iexact="X"
+                ).exclude(
+                    name__in=["Series", "Description", "MRM 25% Profit"]
+                )
 
-                if txt and txt.strip():
-                    cleaned.append(txt.strip())
-                elif num is not None:
-                    cleaned.append(str(num))
+                for flag in flag_attrs:
+                    if model_matches_flag(
+                        selected_model=selected_model,
+                        flag=flag.name,
+                        selected_series=selected_series
+                    ):
+                        if part.description:
+                            valid_options.add(part.description.strip())
+                        break
 
-            cleaned = sorted(set(cleaned))
+            # ✅ If no valid options → remove field entirely
+            if not valid_options:
+                self.fields.pop(field_name, None)
+                continue
 
-            if cleaned:
-                self.fields[field_name].choices += [(v, v) for v in cleaned]
+            # ✅ Otherwise populate choices
+            self.fields[field_name].choices += [
+                (v, v) for v in sorted(valid_options)
+            ]

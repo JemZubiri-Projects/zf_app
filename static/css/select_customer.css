@@ -1,0 +1,83 @@
+/* Full-page centering */
+.select-wrapper {
+    min-height: calc(75vh - 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: var(--color-bg);
+}
+
+/* Card */
+.select-card {
+    background: #ffffff;
+    padding: 40px 36px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 520px;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.05),
+        0 12px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid #F1F1F1;
+    text-align: center;
+}
+
+/* Heading */
+.select-title {
+    font-size: 1.8rem;
+    color: #0D5C63;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.select-subtitle {
+    margin: 0 0 24px 0;
+    font-size: 0.95rem;
+    color: #234C4C;
+    line-height: 1.45;
+}
+
+/* Label */
+.select-label {
+    display: block;
+    text-align: left;
+    color: #247B7B;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* Select input */
+.select-input {
+    width: 100%;
+    padding: 12px;
+    background: #F7FFFF;
+    border: 1px solid #A7D8D7;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color .2s ease;
+}
+
+.select-input:focus {
+    border-color: #247B7B;
+}
+
+/* Continue button */
+.select-btn {
+    width: 100%;
+    padding: 12px;
+    background: #247B7B;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+.select-btn:hover {
+    background: #0D5C63;
+}

@@ -101,7 +101,7 @@ def configure_product(request):
         FormClass = AccessoriesForm
         form_kwargs = {
             "instance": config,
-            "selected_series": config.selected_series,
+            "selected_series": config.selected_series
         }
     elif section == "summary":
         # read-only summary, just a dummy form so code path stays simple
