@@ -11,7 +11,7 @@ from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.conf import settings
 from configurations.models import ProductConfiguration
-from products.models import Family, Part, PartAttribute, QuoteRequest
+from products.models import Family, Part, PartAttribute
 from configurations.forms import DutyForm, ConfigurationForm, ManufacturerForm, PowerForm, SeriesModelForm, AccessoriesForm
 
 
@@ -103,7 +103,7 @@ def configure_product(request):
             "instance": config,
             "selected_series": config.selected_series
         }
-    elif section == "summary":
+    elif section == "summary":  
         # read-only summary, just a dummy form so code path stays simple
         FormClass = forms.Form
         form_kwargs = {}
@@ -346,45 +346,45 @@ def save_configuration(request):
 @login_required
 @require_POST
 def get_quote(request):
-    try:
-        data = json.loads(request.body.decode("utf-8"))
-    except Exception:
-        return JsonResponse({"status":"error","error":"Invalid payload"}, status=400)
+    # try:
+    #     data = json.loads(request.body.decode("utf-8"))
+    # except Exception:
+    #     return JsonResponse({"status":"error","error":"Invalid payload"}, status=400)
 
-    project = data.get("project_name","").strip()
-    email = data.get("email","").strip()
-    mobile = data.get("mobile","").strip()
-    config_uuid = data.get("config_uuid")
+    # project = data.get("project_name","").strip()
+    # email = data.get("email","").strip()
+    # mobile = data.get("mobile","").strip()
+    # config_uuid = data.get("config_uuid")
 
-    if not project:
-        return JsonResponse({"status":"error","error":"Project name required"}, status=400)
-    if not email:
-        return JsonResponse({"status":"error","error":"Email required"}, status=400)
+    # if not project:
+    #     return JsonResponse({"status":"error","error":"Project name required"}, status=400)
+    # if not email:
+    #     return JsonResponse({"status":"error","error":"Email required"}, status=400)
 
-    cfg = None
-    if config_uuid:
-        cfg = ProductConfiguration.objects.filter(uuid=config_uuid).first()
+    # cfg = None
+    # if config_uuid:
+    #     cfg = ProductConfiguration.objects.filter(uuid=config_uuid).first()
 
-    qr = QuoteRequest.objects.create(
-        config=cfg,
-        project_name=project,
-        email=email,
-        mobile=mobile or None,
-        created_by=request.user if request.user.is_authenticated else None
-    )
+    # qr = QuoteRequest.objects.create(
+    #     config=cfg,
+    #     project_name=project,
+    #     email=email,
+    #     mobile=mobile or None,
+    #     created_by=request.user if request.user.is_authenticated else None
+    # )
 
-    # Optional notification email (wrap in try/except)
-    try:
+    # # Optional notification email (wrap in try/except)
+    # try:
         
-        sales_addr = getattr(settings, "SALES_EMAIL", None)
-        if sales_addr:
-            subject = f"New Quote Request #{qr.id}"
-            body = f"Project: {project}\nEmail: {email}\nMobile: {mobile}\nConfig: {config_uuid or 'N/A'}\nID: {qr.id}"
-            send_mail(subject, body, getattr(settings, "DEFAULT_FROM_EMAIL", None), [sales_addr], fail_silently=True)
-    except Exception:
-        pass
+    #     sales_addr = getattr(settings, "SALES_EMAIL", None)
+    #     if sales_addr:
+    #         subject = f"New Quote Request #{qr.id}"
+    #         body = f"Project: {project}\nEmail: {email}\nMobile: {mobile}\nConfig: {config_uuid or 'N/A'}\nID: {qr.id}"
+    #         send_mail(subject, body, getattr(settings, "DEFAULT_FROM_EMAIL", None), [sales_addr], fail_silently=True)
+    # except Exception:
+    #     pass
 
-    return JsonResponse({"status":"ok","id":qr.id})
+    return JsonResponse({"status":"ok","id":"1"})
 
 def api_transmission_by_duty(request):
     duty = request.GET.get("duty")

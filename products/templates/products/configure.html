@@ -455,27 +455,10 @@
 
         <form id="quote-form" class="quote-form" novalidate>
             {% csrf_token %}
-            <input type="hidden" name="config_uuid" id="quote-config-uuid" value="{{ config.uuid }}">
-
-            <label class="form-label required" for="quote-project">Project name</label>
-            <input id="quote-project" name="project_name" class="form-input" type="text" required
-                autocomplete="organization">
-
-            <div class="field-error" id="error-project" aria-live="polite" style="display:none;"></div>
-
-            <label class="form-label required" for="quote-email">Email address</label>
-            <input id="quote-email" name="email" class="form-input" type="email" required autocomplete="email">
-
-            <div class="field-error" id="error-email" aria-live="polite" style="display:none;"></div>
-
             <label class="form-label required" for="quote-po">PO number</label>
             <input id="quote-po" name="po_number" class="form-input" type="text" required>
 
             <div class="field-error" id="error-email" aria-live="polite" style="display:none;"></div>
-
-            <label class="form-label" for="quote-mobile">Mobile number (optional)</label>
-            <input id="quote-mobile" name="mobile" class="form-input" type="tel" placeholder="+63 912 345 6789"
-                autocomplete="tel">
 
             <div class="quote-actions">
                 <button type="button" id="quote-cancel" class="next-btn active">Cancel</button>

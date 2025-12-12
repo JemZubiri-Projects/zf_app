@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from configurations.models import ProductConfiguration
+from accounts.models import Customer, Salesperson
 
 class Family(models.Model):
     code = models.CharField(max_length=64, unique=True)
@@ -72,14 +73,66 @@ class Configuration(models.Model):
     def __str__(self):
         return f"Config #{self.id} for {self.user.username}"
 
-class QuoteRequest(models.Model):
-    config = models.ForeignKey(ProductConfiguration, null=True, blank=True, on_delete=models.SET_NULL)
-    project_name = models.CharField(max_length=255)
-    email = models.EmailField()
-    mobile = models.CharField(max_length=50, blank=True, null=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
-    created_at = models.DateTimeField(auto_now_add=True)
-    processed = models.BooleanField(default=False)
+class Transaction(models.Model):
+    class TransactionType(models.TextChoices):
+        INBOX = "Inbox", "Inbox"
+        OUTBOX = "Outbox", "Outbox"
+
+    class TransactionStatus(models.TextChoices):
+        NEW = "New", "New"
+        RECEIVED = "Received", "Received"
+        READ = "Read", "Read"
+
+    iteration = models.PositiveIntegerField(default=1)
+
+    transaction_date = models.DateField(null=True, blank=True)
+    transaction_type = models.CharField(
+        max_length=10,
+        choices=TransactionType.choices,
+        null=True,
+        blank=True,
+    )
+    transaction_status = models.CharField(
+        max_length=10,
+        choices=TransactionStatus.choices,
+        null=True,
+        blank=True,
+    )
+    request_type = models.CharField(max_length=50, null=True, blank=True)
+
+    # Normalized foreign keys (replace user_name / user_email / salesperson fields)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="transactions",
+        null=True,
+        blank=True,
+    )
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.SET_NULL,
+        related_name="transactions",
+        null=True,
+        blank=True,
+    )
+    salesperson = models.ForeignKey(
+        Salesperson,
+        on_delete=models.SET_NULL,
+        related_name="transactions",
+        null=True,
+        blank=True,
+    )
+
+    # Remaining fields from SQL table
+    email_body = models.TextField(null=True, blank=True)
+    json_file = models.JSONField(null=True, blank=True)
+    pdf_path = models.TextField(null=True, blank=True)
+
+    class Meta:
+        db_table = "transactions"
+        indexes = [
+            models.Index(fields=["iteration"]),
+        ]
 
     def __str__(self):
-        return f"Quote #{self.id} — {self.project_name}"
+        return f"Transaction #{self.id} (iter {self.iteration})"
