@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/inbox.css' %}">
+
+<div class="zf-dashboard-layout">
+
+    {% include "dashboard/_sidebar.html" %}
+
+    <main class="zf-inbox-main">
+
+        <h1 class="zf-page-title">Inbox</h1>
+
+        <!-- Status Tabs -->
+        <div class="zf-inbox-tabs">
+
+            <a href="?status=New" class="zf-inbox-tab {% if status == 'New' %}active{% endif %}">
+                New
+                <span class="zf-tab-badge">{{ new_count }}</span>
+            </a>
+
+            <a href="?status=Received" class="zf-inbox-tab {% if status == 'Received' %}active{% endif %}">
+                Received
+                <span class="zf-tab-badge">{{ received_count }}</span>
+            </a>
+
+            <a href="?status=Read" class="zf-inbox-tab {% if status == 'Read' %}active{% endif %}">
+                Read
+                <span class="zf-tab-badge">{{ read_count }}</span>
+            </a>
+        </div>
+
+        <!-- Inbox List -->
+        <div class="zf-inbox-list">
+            {% for item in inbox_items %}
+            <a href="#" class="zf-inbox-item">
+
+                <div>
+                    <h3 class="zf-inbox-title">
+                        {{ item.subject|default:"(No Subject)" }}
+                    </h3>
+
+                    <p class="zf-inbox-preview">
+                        {{ item.body|truncatechars:120 }}
+                    </p>
+
+                    <p class="zf-inbox-meta">
+                        From: {{ item.user.email }}
+                        <span class="zf-date">{{ item.transaction_date }}</span>
+                    </p>
+                </div>
+
+                <span class="zf-status-badge status-{{ item.status|lower }}">
+                    {{ item.status }}
+                </span>
+
+            </a>
+
+            {% empty %}
+            <p class="zf-empty">No {{ status }} messages.</p>
+            {% endfor %}
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock %}

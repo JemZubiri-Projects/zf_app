@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/applications.css' %}">
+
+<div class="zf-dashboard-layout">
+
+    {% include "dashboard/_sidebar.html" %}
+
+    <main class="zf-app-main">
+
+        <h1 class="zf-page-title">Applications</h1>
+
+        <div class="zf-app-grid">
+
+            <!-- Configurator (Enabled) -->
+            <a href="{% url 'products:landing' %}" class="zf-app-card enabled">
+                <h3>Configurator</h3>
+                <p>Build and customize product configurations.</p>
+            </a>
+
+            <!-- Disabled Items -->
+            <div class="zf-app-card disabled">
+                <h3>Request Financial Statement</h3>
+                <p>Feature coming soon.</p>
+            </div>
+
+            <div class="zf-app-card disabled">
+                <h3>Request Item Order History</h3>
+                <p>Feature coming soon.</p>
+            </div>
+
+            <div class="zf-app-card disabled">
+                <h3>Request Inventory Availability</h3>
+                <p>Feature coming soon.</p>
+            </div>
+
+            <div class="zf-app-card disabled">
+                <h3>Request Open Order Status</h3>
+                <p>Feature coming soon.</p>
+            </div>
+
+            <div class="zf-app-card disabled">
+                <h3>Request Open Sales Quote Status</h3>
+                <p>Feature coming soon.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock %}

@@ -64,6 +64,10 @@ a:hover {
     font-weight: 700;
 }
 
+.login-wrapper {
+    padding: 1.5rem;
+}
+
 /* Right side of header */
 .header-right {
     display: flex;
@@ -94,10 +98,6 @@ a:hover {
     /* #44A1A0 */
 }
 
-/* Main content spacing */
-.app-content {
-    padding: 1.5rem;
-}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

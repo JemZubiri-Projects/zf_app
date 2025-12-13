@@ -1,0 +1,88 @@
+/* ============================
+   ZF CRM SIDEBAR COMPONENT
+   ============================ */
+
+.zf-sidebar {
+    width: 260px;
+    background: #FFFFFF;
+    border-right: 1px solid #E8F4F4;
+    padding: 22px;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 72px);
+    /* below header height */
+    position: sticky;
+    top: 72px;
+}
+
+.zf-sidebar-header {
+    margin-bottom: 24px;
+}
+
+.zf-sidebar-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+}
+
+.zf-sidebar-subtitle {
+    margin: 0;
+    font-size: .88rem;
+    color: #7A9A9A;
+}
+
+.zf-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.zf-sidebar-link {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: #F2FDFC;
+    border: 1px solid #CDEEEE;
+    color: #0D5C63;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.zf-sidebar-link:hover {
+    background: #DDF7F7;
+}
+
+.zf-sidebar-link.active {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: white;
+}
+
+.zf-sidebar-link.active .zf-badge {
+    background: var(--color-bg);
+    color: var(--color-secondary);
+}
+
+.zf-badge {
+    background: var(--color-primary);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+}
+
+.zf-badge-secondary {
+    background: var(--color-accent);
+}
+
+/* Layout container when sidebar is present */
+.zf-dashboard-layout {
+    display: flex;
+    gap: 0;
+}

@@ -1,0 +1,32 @@
+{% load static %}
+
+<aside class="zf-sidebar">
+
+    <div class="zf-sidebar-header">
+        <h3 class="zf-sidebar-title">{{ customer.name }}</h3>
+        <p class="zf-sidebar-subtitle">Customer #{{ customer.customer_number }}</p>
+    </div>
+
+    <nav class="zf-sidebar-nav">
+
+        <a href="{% url 'dashboard:applications' %}"
+            class="zf-sidebar-link {% if active_section == 'applications' %}active{% endif %}">
+            Applications
+        </a>
+
+
+        <a href="{% url 'dashboard:home' %}inbox"
+            class="zf-sidebar-link {% if active_section == 'inbox' %}active{% endif %}">
+            <span>Inbox</span>
+            <span class="zf-badge">{{ inbox_count }}</span>
+        </a>
+
+        <a href="{% url 'dashboard:home' %}outbox"
+            class="zf-sidebar-link {% if active_section == 'outbox' %}active{% endif %}">
+            <span>Outbox</span>
+            <span class="zf-badge zf-badge-secondary">{{ outbox_count }}</span>
+        </a>
+
+    </nav>
+
+</aside>

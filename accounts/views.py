@@ -94,4 +94,4 @@ def set_customer(request):
 
     messages.success(request, "You are now working as the selected customer.")
 
-    return redirect(next_url or "products:landing")
+    return redirect("dashboard:home")

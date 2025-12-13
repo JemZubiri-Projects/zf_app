@@ -1,0 +1,131 @@
+/* =============================
+   ZF CRM Inbox Page (Tabbed)
+============================= */
+
+.zf-inbox-main {
+    flex-grow: 1;
+    padding: 32px;
+}
+
+.zf-page-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    margin-bottom: 20px;
+}
+
+/* Tabs */
+.zf-inbox-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.zf-inbox-tab {
+    padding: 10px 16px;
+    background: #F2FDFC;
+    border: 1px solid #CDEEEE;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #0D5C63;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.zf-inbox-tab:hover {
+    background: #DDF7F7;
+}
+
+.zf-inbox-tab.active {
+    background: var(--color-secondary);
+    color: white;
+    border-color: var(--color-secondary);
+}
+
+.zf-tab-badge {
+    background: white;
+    color: var(--color-secondary);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Inbox List */
+.zf-inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.zf-inbox-item {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.05),
+        0 12px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid #E1F1F1;
+    text-decoration: none;
+    color: var(--color-primary-dark);
+    transition: transform .15s ease;
+}
+
+.zf-inbox-item:hover {
+    background: #FAFFFF;
+    transform: translateY(-2px);
+}
+
+.zf-inbox-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.zf-inbox-preview {
+    margin: 6px 0 0 0;
+    font-size: 0.95rem;
+    color: #234C4C;
+}
+
+.zf-inbox-meta {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #567;
+}
+
+.zf-date {
+    margin-left: 10px;
+    color: #7A9A9A;
+}
+
+/* Status badge reuse */
+.status-new {
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+}
+
+.status-received {
+    background: #DDEEEE;
+    color: #234C4C;
+}
+
+.status-read {
+    background: #F1F1F1;
+    color: #555;
+}
+
+/* Empty */
+.zf-empty {
+    text-align: center;
+    color: #7A9A9A;
+    font-style: italic;
+    margin-top: 20px;
+}
