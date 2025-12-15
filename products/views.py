@@ -1,7 +1,8 @@
 # products/views.py
 import json
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from django import forms
+import datetime
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -12,11 +13,18 @@ from django.core.mail import send_mail
 from django.conf import settings
 from configurations.models import ProductConfiguration
 from products.models import Family, Part, PartAttribute
+from accounts.models import Customer, Salesperson, CustomerDiscount
 from configurations.forms import DutyForm, ConfigurationForm, ManufacturerForm, PowerForm, SeriesModelForm, AccessoriesForm
+from .models import Transaction, Configuration
+from products.mailers import send_sales_quote_created_email
 
 
 def home(request):
     return redirect("products:landing")
+
+@login_required
+def landing(request):
+    return render(request, "products/landing.html")
 
 @login_required
 def configure_product(request):
@@ -286,6 +294,9 @@ def configure_product(request):
                 except Exception:
                     pass
 
+    request.session["spec_rows"] = spec_rows
+    request.session.modified = True
+
     return render(request, "products/configure.html", {
         "form": form,
         "section": section,
@@ -344,82 +355,121 @@ def save_configuration(request):
     return JsonResponse({"status":"ok"})
 
 @login_required
-@require_POST
 def get_quote(request):
-    # try:
-    #     data = json.loads(request.body.decode("utf-8"))
-    # except Exception:
-    #     return JsonResponse({"status":"error","error":"Invalid payload"}, status=400)
+    if request.method != "POST":
+        return JsonResponse({"error": "Invalid request"}, status=400)
 
-    # project = data.get("project_name","").strip()
-    # email = data.get("email","").strip()
-    # mobile = data.get("mobile","").strip()
-    # config_uuid = data.get("config_uuid")
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-    # if not project:
-    #     return JsonResponse({"status":"error","error":"Project name required"}, status=400)
-    # if not email:
-    #     return JsonResponse({"status":"error","error":"Email required"}, status=400)
+    po_number = data.get("po_number")
+    config_uuid = data.get("config_uuid")          # Config unique key
+    project_name = data.get("project_name")        # Optional
+    email = data.get("email")
+    mobile = data.get("mobile")
 
-    # cfg = None
-    # if config_uuid:
-    #     cfg = ProductConfiguration.objects.filter(uuid=config_uuid).first()
+    if not po_number:
+        return JsonResponse({"error": "PO Number is required"}, status=400)
 
-    # qr = QuoteRequest.objects.create(
-    #     config=cfg,
-    #     project_name=project,
-    #     email=email,
-    #     mobile=mobile or None,
-    #     created_by=request.user if request.user.is_authenticated else None
-    # )
+    # Currently selected customer
+    customer_id = request.session.get("acting_customer_id")
+    if not customer_id:
+        return JsonResponse({"error": "No customer selected"}, status=401)
 
-    # # Optional notification email (wrap in try/except)
-    # try:
-        
-    #     sales_addr = getattr(settings, "SALES_EMAIL", None)
-    #     if sales_addr:
-    #         subject = f"New Quote Request #{qr.id}"
-    #         body = f"Project: {project}\nEmail: {email}\nMobile: {mobile}\nConfig: {config_uuid or 'N/A'}\nID: {qr.id}"
-    #         send_mail(subject, body, getattr(settings, "DEFAULT_FROM_EMAIL", None), [sales_addr], fail_silently=True)
-    # except Exception:
-    #     pass
+    customer = Customer.objects.get(id=customer_id)
 
-    return JsonResponse({"status":"ok","id":"1"})
+    # Determine if the requester is a salesperson or a customer
+    salesperson = None
+    if hasattr(request.user, "salesperson_profile"):
+        salesperson = request.user.salesperson_profile
+        user_for_transaction = None  # user_id remains null
+    else:
+        user_for_transaction = request.user  # salesperson is null
 
-def api_transmission_by_duty(request):
-    duty = request.GET.get("duty")
-    if not duty:
-        return JsonResponse({"configs": []})
+    # Retrieve config if needed
+    config = None
+    if config_uuid:
+        try:
+            config = Configuration.objects.get(uuid=config_uuid)
+        except Configuration.DoesNotExist:
+            pass
 
-    selected_decimal = Decimal(str(selected_pf))
+    # Fetch customer discount
+    discount_obj = customer.discounts.filter(active=True).first()
+    customer_discount = float(discount_obj.discount_percent) if discount_obj else 0.0
 
-    part_ids_pf = PartAttribute.objects.filter(
-        part_id__in=part_ids,
-        name__iexact="Power Factor (hp/rpm)",
-        value_number=selected_decimal
-    ).values_list("part_id", flat=True)
+    # Retrieve specification rows (LINES)
+    # You must confirm where spec_rows live — for now assuming they are stored in session
+    spec_rows = request.session.get("spec_rows", [])
 
-    configs = (
-        PartAttribute.objects.filter(
-            part_id__in=part_ids,
-            name__in=["Transmission", "Configuration"]
-        )
-        .values_list("value_text", flat=True)
-        .distinct()
+    lines = []
+    for idx, row in enumerate(spec_rows, start=1):
+        unit_price = row.get("price")
+
+        if unit_price not in (None, "", "-"):
+            try:
+                unit_price = str(
+                    float(
+                        Decimal(str(unit_price)).quantize(0, rounding=ROUND_HALF_UP)
+                    )
+                )
+            except Exception:
+                unit_price = ""
+        else:
+            unit_price = ""
+        lines.append({
+            "Line Number": str(idx),
+            "Type": row.get("type", "Resource"),
+            "No.": row.get("part_number", ""),
+            "Description": row.get("description", ""),
+            "Description 2": row.get("description2", ""),
+            "Quantity": "1",
+            "Unit_Price": unit_price,
+            "Discount": str(customer_discount),
+        })
+
+    # Build JSON File payload
+    today = datetime.date.today()
+
+    json_payload = {
+        "Header": [
+            {
+                "request_type": "CQUOTE",
+                "user_name": request.user.get_full_name(),
+                "user_email": request.user.email,
+                "Customer Number": customer.customer_number,
+                "Customer Name": customer.name,
+                "PO Number": po_number,
+                "Request_Delivery_Date": today.strftime("%m/%d/%Y"),
+            }
+        ],
+        "Lines": lines,
+    }
+
+    # Create Transaction record
+    txn = Transaction.objects.create(
+        transaction_date=today,
+        transaction_type="Outbox",
+        transaction_status="New",
+        request_type="CQUOTE",
+        email_body="Please find the attached quote and product details.",
+        json_file=json_payload,
+        user=user_for_transaction,
+        salesperson=salesperson,
+        customer=customer,
     )
+    send_sales_quote_created_email(txn)
+    config_uuid = request.session.get("config_uuid")
 
-    # 3️⃣ Clean results (remove nulls and blanks)
-    configs = sorted([c for c in configs if c and c.strip()])
+    if config_uuid:
+        ProductConfiguration.objects.filter(uuid=config_uuid).delete()
 
-    return JsonResponse({"configs": configs})
+    # Clear all configurator-related session state
+    request.session.pop("config_uuid", None)
+    request.session.pop("spec_rows", None)
 
+    request.session.modified = True
 
-@login_required
-def logout_view(request):
-    logout(request)
-    request.session.flush()
-    return redirect("accounts:login")
-
-@login_required
-def landing(request):
-    return render(request, "products/landing.html")
+    return JsonResponse({"status": "ok", "transaction_id": txn.id})

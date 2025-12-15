@@ -153,3 +153,4 @@ EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "False") == "True"
 
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@example.com")
 SALES_EMAIL = os.environ.get("SALES_EMAIL", "sales@example.com")
+FINANCE_EMAIL = os.environ.get("FINANCE_EMAIL", "finance.marine@zf.com")

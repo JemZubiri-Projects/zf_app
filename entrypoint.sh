@@ -29,12 +29,16 @@ if [ "$#" -gt 0 ]; then
   exec "$@"
 fi
 
+if [ "$DJANGO_RUN_MIGRATIONS" = "1" ]; then
+  python manage.py migrate --noinput
+fi
+
 # Default behavior: start Django dev server or Gunicorn
 if [ "$DJANGO_USE_GUNICORN" = "1" ]; then
   echo "Starting Gunicorn..."
   exec gunicorn zf_app.wsgi:application \
       --bind 0.0.0.0:8000 \
-      --workers 3
+      --workers ${GUNICORN_WORKERS:-2}
 else
   echo "Starting Django development server..."
   exec python manage.py runserver 0.0.0.0:8000

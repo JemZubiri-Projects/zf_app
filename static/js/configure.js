@@ -225,63 +225,35 @@ setupValidation();
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        // clear previous feedback
-        if (feedback) { feedback.style.display = "none"; feedback.className = "quote-feedback"; feedback.textContent = ""; }
+        if (feedback) {
+            feedback.style.display = "none";
+            feedback.className = "quote-feedback";
+            feedback.textContent = "";
+        }
 
-        // Read correct elements by their template IDs
-        const projectInput = document.getElementById("quote-project");
-        const emailInput = document.getElementById("quote-email");
-        const mobileInput = document.getElementById("quote-mobile");
-        const configInput = document.getElementById("quote-config-uuid");
-
-        const project_name = (projectInput && projectInput.value) ? projectInput.value.trim() : "";
-        const email = (emailInput && emailInput.value) ? emailInput.value.trim() : "";
-        const mobile = (mobileInput && mobileInput.value) ? mobileInput.value.trim() : "";
-        const config_uuid = (configInput && configInput.value) ? configInput.value : "";
-
+        // ---- read form fields ----
+        const poInput = document.getElementById("quote-po");
+        const po_number = poInput ? poInput.value.trim() : "";
 
         let hasError = false;
 
-        // Validate project name
-        if (!project_name) {
-            showFieldError("project", "Project name is required.");
+        if (!po_number) {
+            showFieldError("po", "PO Number is required.");
+            poInput.focus();
             hasError = true;
         } else {
-            clearFieldError("project");
+            clearFieldError("po");
         }
 
-        // Validate email (presence + simple format)
-        if (!email) {
-            showFieldError("email", "Email address is required.");
-            hasError = true;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showFieldError("email", "Enter a valid email address.");
-            hasError = true;
-        } else {
-            clearFieldError("email");
-        }
+        if (hasError) return;
 
-        if (hasError) {
-            // focus first invalid field
-            if (!project_name && projectInput) projectInput.focus();
-            else if (!email && emailInput) emailInput.focus();
-            return;
-        }
-
-        // disable submit button for UX
+        // Disable button
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.textContent = "Sending…";
         }
 
-        const payload = {
-            project_name: project_name,
-            email: email,
-            mobile: mobile,
-            config_uuid: config_uuid
-        };
-
-        // POST to the server. Using absolute path consistent with url conf added earlier.
+        // Send to server
         fetch("/products/get-quote/", {
             method: "POST",
             headers: {
@@ -289,7 +261,9 @@ setupValidation();
                 "X-CSRFToken": csrftoken,
                 "Accept": "application/json"
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                po_number: po_number
+            })
         })
             .then(resp => resp.json().catch(() => ({})))
             .then(data => {
@@ -298,20 +272,26 @@ setupValidation();
                     submitBtn.textContent = "Send Request";
                 }
 
-                if (data && data.status === "ok") {
-                    if (feedback) {
-                        feedback.className = "quote-feedback success";
-                        feedback.textContent = "Thanks — your quote request has been sent. We will contact you soon.";
-                        feedback.style.display = "block";
-                    }
-                    // auto-close after a short delay to show success
-                    setTimeout(closeModal, 1400);
+                if (data.status === "ok") {
+                    feedback.className = "quote-feedback success";
+                    feedback.textContent = "Thanks — your quote request has been sent.";
+                    feedback.style.display = "block";
+
+                    // Show success modal
+                    const successModal = document.getElementById("success-modal");
+                    successModal.classList.add("show");
+
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        const redirect = data.redirect_url || "/dashboard/outbox/";
+                        window.location.href = redirect;
+                    }, 3000);
+
+                    // setTimeout(closeModal, 1200);
                 } else {
-                    if (feedback) {
-                        feedback.className = "quote-feedback error";
-                        feedback.textContent = data && data.error ? data.error : "An error occurred. Please try again later.";
-                        feedback.style.display = "block";
-                    }
+                    feedback.className = "quote-feedback error";
+                    feedback.textContent = data.error || "An error occurred. Please try again later.";
+                    feedback.style.display = "block";
                 }
             })
             .catch(err => {
@@ -319,11 +299,9 @@ setupValidation();
                     submitBtn.disabled = false;
                     submitBtn.textContent = "Send Request";
                 }
-                if (feedback) {
-                    feedback.className = "quote-feedback error";
-                    feedback.textContent = "Network error. Please try again later.";
-                    feedback.style.display = "block";
-                }
+                feedback.className = "quote-feedback error";
+                feedback.textContent = "Network error. Please try again later.";
+                feedback.style.display = "block";
                 console.error("Quote submit error:", err);
             });
     });

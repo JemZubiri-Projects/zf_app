@@ -455,10 +455,9 @@
 
         <form id="quote-form" class="quote-form" novalidate>
             {% csrf_token %}
+
             <label class="form-label required" for="quote-po">PO number</label>
             <input id="quote-po" name="po_number" class="form-input" type="text" required>
-
-            <div class="field-error" id="error-email" aria-live="polite" style="display:none;"></div>
 
             <div class="quote-actions">
                 <button type="button" id="quote-cancel" class="next-btn active">Cancel</button>
@@ -470,5 +469,19 @@
         </form>
     </div>
 </div>
+<div id="success-modal" class="success-modal" aria-hidden="true">
+    <div class="success-backdrop"></div>
+
+    <div class="success-panel">
+        <div class="success-icon">✓</div>
+        <h3 class="success-title">Quote Request Submitted</h3>
+        <p class="success-message">
+            Thank you — your request has been received. We’ll follow up shortly.
+        </p>
+    </div>
+</div>
+
+
+
 <script src="{% static 'js/configure.js' %}"></script>
 {% endblock %}

@@ -60,3 +60,14 @@ class CustomerMembership(models.Model):
 
     def __str__(self):
         return f"{self.user.username} → {self.customer.customer_number}"
+    
+class CustomerDiscount(models.Model):
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.CASCADE,
+        related_name="discounts"
+    )
+
+    name = models.CharField(max_length=255)
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2)
+    active = models.BooleanField(default=True)

@@ -507,12 +507,10 @@ class AccessoriesForm(forms.ModelForm):
                             valid_options.add(part.description.strip())
                         break
 
-            # ✅ If no valid options → remove field entirely
             if not valid_options:
                 self.fields.pop(field_name, None)
                 continue
 
-            # ✅ Otherwise populate choices
             self.fields[field_name].choices += [
                 (v, v) for v in sorted(valid_options)
             ]
