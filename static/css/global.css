@@ -7,6 +7,10 @@
 }
 
 body {
+    outline: 5px solid red !important;
+}
+
+body {
     background-color: var(--color-bg);
     color: var(--color-primary-dark);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
