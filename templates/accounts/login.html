@@ -15,6 +15,17 @@
                 style="display:block;width:100%;margin:6px 0;padding:8px;border:1px solid var(--color-primary);border-radius:4px;">
             <button type="submit">Login</button>
         </form>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}

@@ -157,3 +157,26 @@ input[type="radio"] {
     margin-top: 6px;
     font-size: 0.9rem;
 }
+
+.messages {
+    margin: 20px auto;
+}
+
+.message {
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.message.error {
+    background: #fdecea;
+    color: #611a15;
+    border: 1px solid #f5c6cb;
+}
+
+.message.success {
+    background: #e6fffa;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
