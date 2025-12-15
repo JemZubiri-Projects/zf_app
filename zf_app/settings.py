@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'zf_app.wsgi.application'
 STATICFILES_DIRS = [
     BASE_DIR / "static",   # <-- this MUST exist
 ]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = Path("/app/staticfiles")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
