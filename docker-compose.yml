@@ -3,30 +3,23 @@ version: "3.9"
 services:
   web:
     build: .
-    container_name: django-web
-    command: /entrypoint.sh
-    volumes:
-      - static_volume:/app/staticfiles
-    ports:
-      - "8000:8000"
+    command: gunicorn zf_app.wsgi:application --bind 0.0.0.0:8000 --workers 2
     env_file:
       - .env
     depends_on:
       - db
+    volumes:
+      - static_volume:/app/staticfiles
+    restart: unless-stopped
 
   db:
     image: mysql:8.0
-    container_name: django-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "3306:3306"
+    env_file:
+      - .env
     volumes:
       - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
   nginx:
     image: nginx:1.25-alpine
     ports:
