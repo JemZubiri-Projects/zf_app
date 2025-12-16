@@ -398,7 +398,7 @@ def get_quote(request):
 
     # Fetch customer discount
     discount_obj = customer.discounts.filter(active=True).first()
-    customer_discount = float(discount_obj.discount_percent) * .10 if discount_obj else 0.0
+    customer_discount = float(discount_obj.discount_percent) / 100 if discount_obj else 0.0
 
     # Retrieve specification rows (LINES)
     # You must confirm where spec_rows live — for now assuming they are stored in session
